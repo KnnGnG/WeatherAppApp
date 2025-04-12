@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="settings-container">
+
+    <div class="settings-item">
+      <div class="label">
+        <ion-icon name="thermometer-outline"></ion-icon>
+        Temperature Unit
+      </div>
+      <ion-toggle slot="end" [(ngModel)]="isCelsius" (ionChange)="toggleUnits()"></ion-toggle>
+    </div>
+
+    <div class="settings-item">
+      <div class="label">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        Weather Alerts
+      </div>
+      <ion-toggle slot="end" [(ngModel)]="alertsEnabled" (ionChange)="toggleAlerts()"></ion-toggle>
+    </div>
+
+  </div>
+
+</ion-content>

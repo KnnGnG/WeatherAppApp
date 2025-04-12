@@ -1,11 +1,22 @@
 import { Component } from '@angular/core';
+import { Platform } from '@ionic/angular';
+import { WeatherService } from '../app/services/weather.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
   standalone: false,
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  constructor() {}
+
+  constructor(private platform: Platform, private weatherService: WeatherService) {
+    this.initializeApp();
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      this.weatherService.loadSavedTheme();
+    });
+  }
 }

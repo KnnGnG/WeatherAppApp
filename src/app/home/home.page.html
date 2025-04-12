@@ -1,20 +1,69 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+
+    <ion-title class="main-title">
+      Weather Forecast
     </ion-title>
+
+    <ion-buttons slot="end" class="header-buttons">
+      <ion-button fill="clear" size="small" (click)="toggleUnits()">
+        {{ isCelsius ? '°C' : '°F' }}
+      </ion-button>
+
+      <ion-button fill="clear" size="small" (click)="toggleAlerts()">
+        <ion-icon [name]="alertsEnabled ? 'notifications' : 'notifications-off'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <ion-searchbar
+    [formControl]="searchControl"
+    placeholder="Search City..."
+    (ionClear)="loadWeatherByCurrentLocation()"
+    (ionChange)="searchWeather()">
+  </ion-searchbar>
+
+  <div *ngIf="currentWeather" class="current-weather-box">
+    <h2>{{ currentWeather.name }}</h2>
+    <div class="temp">{{ currentWeather.main.temp }} {{ isCelsius ? '°C' : '°F' }}</div>
+    <div class="weather-desc">
+      <img src="https://openweathermap.org/img/wn/{{ currentWeather.weather[0].icon }}@2x.png" alt="Weather Icon">
+      <p>{{ currentWeather.weather[0].description | titlecase }}</p>
+    </div>
+    <div class="weather-details">
+      <div>Humidity: {{ currentWeather.main.humidity }}%</div>
+      <div>Wind: {{ currentWeather.wind.speed }} {{ isCelsius ? 'm/s' : 'mph' }}</div>
+    </div>
+
+    <div *ngIf="alertsEnabled && currentWeather.weather[0]?.description?.includes('storm')" class="alert-box">
+      <ion-icon name="warning" color="danger"></ion-icon> Severe Weather Alert!
+    </div>
   </div>
+
+  <h3 class="section-title">5-Day Forecast</h3>
+
+  <div class="forecast-list">
+    <div class="forecast-card" *ngFor="let item of forecast">
+      <div class="date">{{ item.dt_txt.split(' ')[0] }}</div>
+      <img src="https://openweathermap.org/img/wn/{{ item.weather[0].icon }}@2x.png" alt="Icon">
+      <div class="temp">{{ item.main.temp }} {{ isCelsius ? '°C' : '°F' }}</div>
+      <div class="desc">{{ item.weather[0].description | titlecase }}</div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Hourly Forecast (Today)</h3>
+
+  <div class="forecast-list">
+    <div class="forecast-card" *ngFor="let item of hourlyForecast">
+      <div class="date">{{ item.dt_txt.split(' ')[1] }}</div>
+      <img src="https://openweathermap.org/img/wn/{{ item.weather[0].icon }}@2x.png" alt="Icon">
+      <div class="temp">{{ item.main.temp }} {{ isCelsius ? '°C' : '°F' }}</div>
+      <div class="desc">{{ item.weather[0].description | titlecase }}</div>
+    </div>
+  </div>
+
 </ion-content>
