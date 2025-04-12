@@ -127,5 +127,4 @@ export class HomePage implements OnInit {
     });
     await toast.present();
   }
-
 }
