@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar class="header-toolbar">
-
     <ion-title class="main-title">
       Weather Forecast
     </ion-title>
@@ -14,18 +13,19 @@
         <ion-icon [name]="alertsEnabled ? 'notifications' : 'notifications-off'"></ion-icon>
       </ion-button>
     </ion-buttons>
+  </ion-toolbar>
 
+  <ion-toolbar>
+    <ion-searchbar
+      [formControl]="searchControl"
+      placeholder="Search City..."
+      (ionClear)="loadWeatherByCurrentLocation()"
+      (ionChange)="searchWeather()">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-
-  <ion-searchbar
-    [formControl]="searchControl"
-    placeholder="Search City..."
-    (ionClear)="loadWeatherByCurrentLocation()"
-    (ionChange)="searchWeather()">
-  </ion-searchbar>
+<ion-content class="ion-padding" scrollEvents="true">
 
   <div *ngIf="currentWeather" class="current-weather-box">
     <h2>{{ currentWeather.name }}</h2>
@@ -44,22 +44,20 @@
     </div>
   </div>
 
-  <h3 class="section-title">5-Day Forecast</h3>
-
+  <h3 class="section-title">Hourly Forecast (Today)</h3>
   <div class="forecast-list">
-    <div class="forecast-card" *ngFor="let item of forecast">
-      <div class="date">{{ item.dt_txt.split(' ')[0] }}</div>
+    <div class="forecast-card" *ngFor="let item of hourlyForecast">
+      <div class="date">{{ item.dt_txt.split(' ')[1] }}</div>
       <img src="https://openweathermap.org/img/wn/{{ item.weather[0].icon }}@2x.png" alt="Icon">
       <div class="temp">{{ item.main.temp }} {{ isCelsius ? '°C' : '°F' }}</div>
       <div class="desc">{{ item.weather[0].description | titlecase }}</div>
     </div>
   </div>
 
-  <h3 class="section-title">Hourly Forecast (Today)</h3>
-
+  <h3 class="section-title">5-Day Forecast</h3>
   <div class="forecast-list">
-    <div class="forecast-card" *ngFor="let item of hourlyForecast">
-      <div class="date">{{ item.dt_txt.split(' ')[1] }}</div>
+    <div class="forecast-card" *ngFor="let item of forecast">
+      <div class="date">{{ item.dt_txt.split(' ')[0] }}</div>
       <img src="https://openweathermap.org/img/wn/{{ item.weather[0].icon }}@2x.png" alt="Icon">
       <div class="temp">{{ item.main.temp }} {{ isCelsius ? '°C' : '°F' }}</div>
       <div class="desc">{{ item.weather[0].description | titlecase }}</div>
