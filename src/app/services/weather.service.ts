@@ -50,25 +50,25 @@ export class WeatherService {
       });
   }
 
-
+//store data in device storage
   async cacheWeatherData(key: string, data: any) {
     await Preferences.set({ key, value: JSON.stringify(data) });
   }
 
-
+//load data from device storage
   async getCachedWeatherData(key: string) {
     const { value } = await Preferences.get({ key });
     return value ? JSON.parse(value) : null;
   }
 
   
-  async toggleTheme(isDark: boolean) {
+  /*async toggleTheme(isDark: boolean) {
     document.body.setAttribute('color-theme', isDark ? 'dark' : 'light');
     await Preferences.set({
       key: 'theme',
       value: isDark ? 'dark' : 'light'
     });
-  }
+  }*/
 
 
   async loadSavedTheme() {

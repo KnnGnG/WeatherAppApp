@@ -12,10 +12,10 @@ import { ToastController } from '@ionic/angular';
 export class HomePage implements OnInit {
 
   searchControl = new FormControl('');
-  currentWeather: any;
-  forecast: any[] = [];
+  currentWeather: any; //Weather data
+  forecast: any[] = []; 
   hourlyForecast: any[] = [];
-  isCelsius: boolean = true;
+  isCelsius: boolean = true; // settings
   alertsEnabled: boolean = true;
   isDarkMode: boolean = false;
   unitType: string = 'metric';
@@ -25,14 +25,14 @@ export class HomePage implements OnInit {
     private toastCtrl: ToastController
   ) {}
 
-  async ngOnInit() {
+  async ngOnInit() { // call component init
     await this.weatherService.loadSavedTheme();
-    await this.loadSettings();
-    await this.loadWeatherByCurrentLocation();
+    await this.loadSettings(); // e load ang saved unit preferences
+    await this.loadWeatherByCurrentLocation(); // autoload current Gps
     this.checkTheme();
   }
 
-  async loadSettings() {
+  async loadSettings() { // dri ang katong e load user pref sa storage
     const unit = await this.weatherService.getCachedWeatherData('unit');
     const alert = await this.weatherService.getCachedWeatherData('alerts');
 
@@ -41,12 +41,12 @@ export class HomePage implements OnInit {
     this.alertsEnabled = alert !== false;
   }
 
-  checkTheme() {
+  checkTheme() { // nag current app theme
     const currentTheme = document.body.getAttribute('color-theme');
     this.isDarkMode = currentTheme === 'dark';
   }
 
-  async loadWeatherByCurrentLocation() {
+  async loadWeatherByCurrentLocation() { // load data weather
     try {
       const coords = await this.weatherService.getCurrentLocation();
       await this.loadWeather(coords.lat, coords.lon);
@@ -70,7 +70,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  async loadWeather(lat: number, lon: number) {
+  async loadWeather(lat: number, lon: number) { // dri ang e load weather og forecast sa API
     const online = await this.weatherService.isOnline();
 
     if (online) {
